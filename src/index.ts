@@ -1,9 +1,4 @@
-# Abstract IO
-
-An interface and base class for creating Johnny-Five IO plugins. More documentation coming soon!
-
-# License
-
+/*
 MIT License
 
 Copyright (c) 2018 Bryan Hughes <bryan@nebri.us>
@@ -25,3 +20,30 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+import { EventEmitter } from 'events';
+
+export interface IAbstractIO {
+  isReady: boolean;
+
+  readonly MODES: {
+    INPUT: number;
+    OUTPUT: number;
+    ANALOG: number;
+    PWM: number;
+    SERVO: number;
+  };
+}
+
+export class AbstractIO extends EventEmitter implements IAbstractIO {
+  public isReady = false;
+
+  public readonly MODES = {
+    INPUT: 0,
+    OUTPUT: 1,
+    ANALOG: 2,
+    PWM: 3,
+    SERVO: 4
+  };
+}

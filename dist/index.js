@@ -1,9 +1,5 @@
-# Abstract IO
-
-An interface and base class for creating Johnny-Five IO plugins. More documentation coming soon!
-
-# License
-
+"use strict";
+/*
 MIT License
 
 Copyright (c) 2018 Bryan Hughes <bryan@nebri.us>
@@ -25,3 +21,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+Object.defineProperty(exports, "__esModule", { value: true });
+const events_1 = require("events");
+class AbstractIO extends events_1.EventEmitter {
+    constructor() {
+        super(...arguments);
+        this.isReady = false;
+        this.MODES = {
+            INPUT: 0,
+            OUTPUT: 1,
+            ANALOG: 2,
+            PWM: 3,
+            SERVO: 4
+        };
+    }
+}
+exports.AbstractIO = AbstractIO;
+//# sourceMappingURL=index.js.map
