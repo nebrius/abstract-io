@@ -24,17 +24,36 @@ SOFTWARE.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
+var Mode;
+(function (Mode) {
+    Mode[Mode["INPUT"] = 0] = "INPUT";
+    Mode[Mode["OUTPUT"] = 1] = "OUTPUT";
+    Mode[Mode["ANALOG"] = 2] = "ANALOG";
+    Mode[Mode["PWM"] = 3] = "PWM";
+    Mode[Mode["SERVO"] = 4] = "SERVO";
+})(Mode = exports.Mode || (exports.Mode = {}));
+var Value;
+(function (Value) {
+    Value[Value["HIGH"] = 1] = "HIGH";
+    Value[Value["LOW"] = 0] = "LOW";
+})(Value = exports.Value || (exports.Value = {}));
 class AbstractIO extends events_1.EventEmitter {
     constructor() {
         super(...arguments);
         this.isReady = false;
         this.MODES = {
-            INPUT: 0,
-            OUTPUT: 1,
-            ANALOG: 2,
-            PWM: 3,
-            SERVO: 4
+            INPUT: Mode.INPUT,
+            OUTPUT: Mode.OUTPUT,
+            ANALOG: Mode.ANALOG,
+            PWM: Mode.PWM,
+            SERVO: Mode.SERVO
         };
+        this.pins = [];
+        this.analogPins = [];
+    }
+    // Writing methods
+    analogWrite(pin, value) {
+        this.pwmWrite(pin, value);
     }
 }
 exports.AbstractIO = AbstractIO;
