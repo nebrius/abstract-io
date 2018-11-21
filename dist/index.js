@@ -37,7 +37,7 @@ var Value;
     Value[Value["HIGH"] = 1] = "HIGH";
     Value[Value["LOW"] = 0] = "LOW";
 })(Value = exports.Value || (exports.Value = {}));
-class AbstractIO extends events_1.EventEmitter {
+class AbstractIOCore extends events_1.EventEmitter {
     constructor() {
         super(...arguments);
         this.isReady = false;
@@ -50,10 +50,143 @@ class AbstractIO extends events_1.EventEmitter {
         };
         this.pins = [];
         this.analogPins = [];
+        this.HIGH = Value.HIGH;
+        this.LOW = Value.LOW;
+    }
+    // Deprecated aliases and firmata.js compatibility functions that IO plugins don't need to worry about
+    analogWrite(pin, value) {
+        this.pwmWrite(pin, value);
+    }
+    sendI2CConfig(options) {
+        return this.i2cConfig(options);
+    }
+    sendI2CWriteRequest(address, registerOrInBytes, inBytes) {
+        return this.i2cWrite(address, registerOrInBytes, inBytes);
+    }
+    sendI2CReadRequest(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
+        return this.i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler, handler);
+    }
+    reset() {
+        throw new Error('reset is not supported by this IO plugin');
+    }
+    reportAnalogPin() {
+        throw new Error('reportAnalogPin is not supported by this IO plugin');
+    }
+    reportDigitalPin() {
+        throw new Error('reportDigitalPin is not supported by this IO plugin');
+    }
+    pulseIn() {
+        throw new Error('pulseIn is not supported by this IO plugin');
+    }
+}
+exports.AbstractIOCore = AbstractIOCore;
+class AbstractIO extends AbstractIOCore {
+    constructor() {
+        super(...arguments);
+        this.name = 'Unnamed IO Plugin';
+        this.defaultLed = NaN;
+    }
+    pinMode(pin, mode) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
     }
     // Writing methods
     analogWrite(pin, value) {
         this.pwmWrite(pin, value);
+    }
+    pwmWrite(pin, value) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    servoWrite(pin, value) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    digitalWrite(pin, value) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    i2cWrite(address, registerOrInBytes, inBytes) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    i2cWriteReg(address, register, value) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    serialWrite(portId, inBytes) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    // Reading methods
+    analogRead(pin, handler) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    digitalRead(pin, handler) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    i2cRead(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    pingRead(settings, handler) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    serialRead(portId, maxBytesToReadOrHandler, handler) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    // Configuring
+    i2cConfig(options) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    serialConfig(options) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    servoConfig(optionsOrPin, min, max) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    // IO Control
+    serialStop(portId) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    serialClose(portId) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    serialFlush(portId) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
+    sendOneWireConfig() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireSearch() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireAlarmsSearch() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireRead() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireReset() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireWrite() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireDelay() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    sendOneWireWriteAndRead() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    setSamplingInterval() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    stepperConfig() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    stepperStep() {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
+    }
+    // Special
+    normalize(pin) {
+        throw new Error('This method must be implemented by a derived IO Plugin class');
     }
 }
 exports.AbstractIO = AbstractIO;
