@@ -75,27 +75,46 @@ export interface IServoConfig {
 export type ReadHandler = (data: number[]) => void;
 
 export class AbstractIO extends EventEmitter {
-  public readonly MODES = {
-    INPUT: Mode.INPUT,
-    OUTPUT: Mode.OUTPUT,
-    ANALOG: Mode.ANALOG,
-    PWM: Mode.PWM,
-    SERVO: Mode.SERVO
-  };
+  public get MODES() {
+    return {
+      INPUT: Mode.INPUT,
+      OUTPUT: Mode.OUTPUT,
+      ANALOG: Mode.ANALOG,
+      PWM: Mode.PWM,
+      SERVO: Mode.SERVO,
+      UNKOWN: Mode.UNKOWN
+    };
+  }
 
-  public readonly HIGH: number = Value.HIGH;
-  public readonly LOW: number = Value.LOW;
+  public get HIGH() {
+    return Value.HIGH;
+  }
+  public get LOW() {
+    return Value.LOW;
+  }
 
-  public readonly pins: IPinConfiguration[] = [];
-  public readonly analogPins: number[] = [];
+  public get pins(): IPinConfiguration[] {
+    throw new Error(`The "pins" property must be overridden by a derived IO Plugin class`);
+  }
 
-  public readonly name: string = 'Unnamed IO Plugin';
-  public readonly defaultLed: string | number = NaN;
+  public get analogPins(): number[] {
+    throw new Error(`The "analogPins" property must be overridden by a derived IO Plugin class`);
+  }
 
-  public isReady = false;
+  public get name(): string {
+    throw new Error(`The "name" property must be overridden by a derived IO Plugin class`);
+  }
+
+  public get defaultLed(): string | number | undefined {
+    return undefined;
+  }
+
+  public get isReady(): boolean {
+    throw new Error(`The "isReady" property must be overridden by a derived IO Plugin class`);
+  }
 
   public pinMode(pin: string | number, mode: Mode): void {
-    throw new Error(`pinMode is not supported by ${this.name}`);
+    throw new Error(`The "pinMode" method must be overridden by a derived IO Plugin class`);
   }
 
   // Writing methods

@@ -39,25 +39,39 @@ var Value;
     Value[Value["LOW"] = 0] = "LOW";
 })(Value = exports.Value || (exports.Value = {}));
 class AbstractIO extends events_1.EventEmitter {
-    constructor() {
-        super(...arguments);
-        this.MODES = {
+    get MODES() {
+        return {
             INPUT: Mode.INPUT,
             OUTPUT: Mode.OUTPUT,
             ANALOG: Mode.ANALOG,
             PWM: Mode.PWM,
-            SERVO: Mode.SERVO
+            SERVO: Mode.SERVO,
+            UNKOWN: Mode.UNKOWN
         };
-        this.HIGH = Value.HIGH;
-        this.LOW = Value.LOW;
-        this.pins = [];
-        this.analogPins = [];
-        this.name = 'Unnamed IO Plugin';
-        this.defaultLed = NaN;
-        this.isReady = false;
+    }
+    get HIGH() {
+        return Value.HIGH;
+    }
+    get LOW() {
+        return Value.LOW;
+    }
+    get pins() {
+        throw new Error(`The "pins" property must be overridden by a derived IO Plugin class`);
+    }
+    get analogPins() {
+        throw new Error(`The "analogPins" property must be overridden by a derived IO Plugin class`);
+    }
+    get name() {
+        throw new Error(`The "name" property must be overridden by a derived IO Plugin class`);
+    }
+    get defaultLed() {
+        return undefined;
+    }
+    get isReady() {
+        throw new Error(`The "isReady" property must be overridden by a derived IO Plugin class`);
     }
     pinMode(pin, mode) {
-        throw new Error(`pinMode is not supported by ${this.name}`);
+        throw new Error(`The "pinMode" method must be overridden by a derived IO Plugin class`);
     }
     // Writing methods
     pwmWrite(pin, value) {
