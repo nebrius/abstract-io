@@ -31,16 +31,16 @@ var Mode;
     Mode[Mode["ANALOG"] = 2] = "ANALOG";
     Mode[Mode["PWM"] = 3] = "PWM";
     Mode[Mode["SERVO"] = 4] = "SERVO";
+    Mode[Mode["UNKOWN"] = 99] = "UNKOWN";
 })(Mode = exports.Mode || (exports.Mode = {}));
 var Value;
 (function (Value) {
     Value[Value["HIGH"] = 1] = "HIGH";
     Value[Value["LOW"] = 0] = "LOW";
 })(Value = exports.Value || (exports.Value = {}));
-class AbstractIOCore extends events_1.EventEmitter {
+class AbstractIO extends events_1.EventEmitter {
     constructor() {
         super(...arguments);
-        this.isReady = false;
         this.MODES = {
             INPUT: Mode.INPUT,
             OUTPUT: Mode.OUTPUT,
@@ -48,10 +48,112 @@ class AbstractIOCore extends events_1.EventEmitter {
             PWM: Mode.PWM,
             SERVO: Mode.SERVO
         };
-        this.pins = [];
-        this.analogPins = [];
         this.HIGH = Value.HIGH;
         this.LOW = Value.LOW;
+        this.pins = [];
+        this.analogPins = [];
+        this.name = 'Unnamed IO Plugin';
+        this.defaultLed = NaN;
+        this.isReady = false;
+    }
+    pinMode(pin, mode) {
+        throw new Error(`pinMode is not supported by ${this.name}`);
+    }
+    // Writing methods
+    pwmWrite(pin, value) {
+        throw new Error(`pwmWrite is not supported by ${this.name}`);
+    }
+    servoWrite(pin, value) {
+        throw new Error(`servoWrite is not supported by ${this.name}`);
+    }
+    digitalWrite(pin, value) {
+        throw new Error(`digitalWrite is not supported by ${this.name}`);
+    }
+    i2cWrite(address, registerOrInBytes, inBytes) {
+        throw new Error(`i2cWrite is not supported by ${this.name}`);
+    }
+    i2cWriteReg(address, register, value) {
+        throw new Error(`i2cWriteReg is not supported by ${this.name}`);
+    }
+    serialWrite(portId, inBytes) {
+        throw new Error(`serialWrite is not supported by ${this.name}`);
+    }
+    // Reading methods
+    analogRead(pin, handler) {
+        throw new Error(`analogRead is not supported by ${this.name}`);
+    }
+    digitalRead(pin, handler) {
+        throw new Error(`digitalRead is not supported by ${this.name}`);
+    }
+    i2cRead(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
+        throw new Error(`i2cRead is not supported by ${this.name}`);
+    }
+    i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
+        throw new Error(`i2cReadOnce is not supported by ${this.name}`);
+    }
+    pingRead(settings, handler) {
+        throw new Error(`pingRead is not supported by ${this.name}`);
+    }
+    serialRead(portId, maxBytesToReadOrHandler, handler) {
+        throw new Error(`serialRead is not supported by ${this.name}`);
+    }
+    // Configuring
+    i2cConfig(options) {
+        throw new Error(`i2cConfig is not supported by ${this.name}`);
+    }
+    serialConfig(options) {
+        throw new Error(`serialConfig is not supported by ${this.name}`);
+    }
+    servoConfig(optionsOrPin, min, max) {
+        throw new Error(`servoConfig is not supported by ${this.name}`);
+    }
+    // IO Control
+    serialStop(portId) {
+        throw new Error(`serialStop is not supported by ${this.name}`);
+    }
+    serialClose(portId) {
+        throw new Error(`serialClose is not supported by ${this.name}`);
+    }
+    serialFlush(portId) {
+        throw new Error(`serialFlush is not supported by ${this.name}`);
+    }
+    // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
+    sendOneWireConfig() {
+        throw new Error(`sendOneWireConfig is not supported by ${this.name}`);
+    }
+    sendOneWireSearch() {
+        throw new Error(`sendOneWireSearch is not supported by ${this.name}`);
+    }
+    sendOneWireAlarmsSearch() {
+        throw new Error(`sendOneWireAlarmsSearch is not supported by ${this.name}`);
+    }
+    sendOneWireRead() {
+        throw new Error(`sendOneWireRead is not supported by ${this.name}`);
+    }
+    sendOneWireReset() {
+        throw new Error(`sendOneWireReset is not supported by ${this.name}`);
+    }
+    sendOneWireWrite() {
+        throw new Error(`sendOneWireWrite is not supported by ${this.name}`);
+    }
+    sendOneWireDelay() {
+        throw new Error(`sendOneWireDelay is not supported by ${this.name}`);
+    }
+    sendOneWireWriteAndRead() {
+        throw new Error(`sendOneWireWriteAndRead is not supported by ${this.name}`);
+    }
+    setSamplingInterval() {
+        throw new Error(`setSamplingInterval is not supported by ${this.name}`);
+    }
+    stepperConfig() {
+        throw new Error(`stepperConfig is not supported by ${this.name}`);
+    }
+    stepperStep() {
+        throw new Error(`stepperStep is not supported by ${this.name}`);
+    }
+    // Special
+    normalize(pin) {
+        throw new Error(`normalize is not supported by ${this.name}`);
     }
     // Deprecated aliases and firmata.js compatibility functions that IO plugins don't need to worry about
     analogWrite(pin, value) {
@@ -77,116 +179,6 @@ class AbstractIOCore extends events_1.EventEmitter {
     }
     pulseIn() {
         throw new Error('pulseIn is not supported by this IO plugin');
-    }
-}
-exports.AbstractIOCore = AbstractIOCore;
-class AbstractIO extends AbstractIOCore {
-    constructor() {
-        super(...arguments);
-        this.name = 'Unnamed IO Plugin';
-        this.defaultLed = NaN;
-    }
-    pinMode(pin, mode) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    // Writing methods
-    analogWrite(pin, value) {
-        this.pwmWrite(pin, value);
-    }
-    pwmWrite(pin, value) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    servoWrite(pin, value) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    digitalWrite(pin, value) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    i2cWrite(address, registerOrInBytes, inBytes) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    i2cWriteReg(address, register, value) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    serialWrite(portId, inBytes) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    // Reading methods
-    analogRead(pin, handler) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    digitalRead(pin, handler) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    i2cRead(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler, handler) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    pingRead(settings, handler) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    serialRead(portId, maxBytesToReadOrHandler, handler) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    // Configuring
-    i2cConfig(options) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    serialConfig(options) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    servoConfig(optionsOrPin, min, max) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    // IO Control
-    serialStop(portId) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    serialClose(portId) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    serialFlush(portId) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
-    sendOneWireConfig() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireSearch() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireAlarmsSearch() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireRead() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireReset() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireWrite() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireDelay() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    sendOneWireWriteAndRead() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    setSamplingInterval() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    stepperConfig() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    stepperStep() {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
-    }
-    // Special
-    normalize(pin) {
-        throw new Error('This method must be implemented by a derived IO Plugin class');
     }
 }
 exports.AbstractIO = AbstractIO;

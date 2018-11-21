@@ -29,7 +29,8 @@ export enum Mode {
   OUTPUT = 1,
   ANALOG = 2,
   PWM = 3,
-  SERVO = 4
+  SERVO = 4,
+  UNKOWN = 99
 }
 
 export enum Value {
@@ -73,9 +74,7 @@ export interface IServoConfig {
 
 export type ReadHandler = (data: number[]) => void;
 
-export abstract class AbstractIOCore extends EventEmitter {
-  public isReady = false;
-
+export class AbstractIO extends EventEmitter {
   public readonly MODES = {
     INPUT: Mode.INPUT,
     OUTPUT: Mode.OUTPUT,
@@ -84,136 +83,201 @@ export abstract class AbstractIOCore extends EventEmitter {
     SERVO: Mode.SERVO
   };
 
-  public readonly pins: IPinConfiguration[] = [];
-  public readonly analogPins: number[] = [];
   public readonly HIGH: number = Value.HIGH;
   public readonly LOW: number = Value.LOW;
-  public abstract readonly name: string;
-  public abstract readonly defaultLed: string | number;
 
-  public abstract pinMode(pin: string | number, mode: Mode): void;
+  public readonly pins: IPinConfiguration[] = [];
+  public readonly analogPins: number[] = [];
+
+  public readonly name: string = 'Unnamed IO Plugin';
+  public readonly defaultLed: string | number = NaN;
+
+  public isReady = false;
+
+  public pinMode(pin: string | number, mode: Mode): void {
+    throw new Error(`pinMode is not supported by ${this.name}`);
+  }
 
   // Writing methods
 
-  public abstract pwmWrite(pin: string | number, value: number): void;
+  public pwmWrite(pin: string | number, value: number): void {
+    throw new Error(`pwmWrite is not supported by ${this.name}`);
+  }
 
-  public abstract servoWrite(pin: string | number, value: number): void;
+  public servoWrite(pin: string | number, value: number): void {
+    throw new Error(`servoWrite is not supported by ${this.name}`);
+  }
 
-  public abstract digitalWrite(pin: string | number, value: number): void;
+  public digitalWrite(pin: string | number, value: number): void {
+    throw new Error(`digitalWrite is not supported by ${this.name}`);
+  }
 
-  public abstract i2cWrite(address: number, inBytes: number[]): void;
-  public abstract i2cWrite(address: number, register: number, inBytes: number[]): void;
-  public abstract i2cWrite(address: number, registerOrInBytes: number | number[], inBytes?: number[]): void;
+  public i2cWrite(address: number, inBytes: number[]): void;
+  public i2cWrite(address: number, register: number, inBytes: number[]): void;
+  public i2cWrite(address: number, registerOrInBytes: number | number[], inBytes?: number[]): void {
+    throw new Error(`i2cWrite is not supported by ${this.name}`);
+  }
 
-  public abstract i2cWriteReg(address: number, register: number, value: number): void;
+  public i2cWriteReg(address: number, register: number, value: number): void {
+    throw new Error(`i2cWriteReg is not supported by ${this.name}`);
+  }
 
-  public abstract serialWrite(portId: string | number, inBytes: number[]): void;
+  public serialWrite(portId: string | number, inBytes: number[]): void {
+    throw new Error(`serialWrite is not supported by ${this.name}`);
+  }
 
   // Reading methods
 
-  public abstract analogRead(pin: string | number, handler: (value: number) => void): void;
+  public analogRead(pin: string | number, handler: (value: number) => void): void {
+    throw new Error(`analogRead is not supported by ${this.name}`);
+  }
 
-  public abstract digitalRead(pin: string | number, handler: (value: Value) => void): void;
+  public digitalRead(pin: string | number, handler: (value: Value) => void): void {
+    throw new Error(`digitalRead is not supported by ${this.name}`);
+  }
 
-  public abstract i2cRead(
+  public i2cRead(
     address: number,
     bytesToRead: number,
     handler: ReadHandler
   ): void;
-  public abstract i2cRead(
+  public i2cRead(
     address: number,
     register: number,
     bytesToRead: number,
     handler: ReadHandler
   ): void;
-  public abstract i2cRead(
+  public i2cRead(
     address: number,
     registerOrBytesToRead: number,
     bytesToReadOrHandler: ReadHandler | number,
     handler?: ReadHandler
-  ): void;
+  ): void {
+    throw new Error(`i2cRead is not supported by ${this.name}`);
+  }
 
-  public abstract i2cReadOnce(
+  public i2cReadOnce(
     address: number,
     bytesToRead: number,
     handler: ReadHandler
   ): void;
-  public abstract i2cReadOnce(
+  public i2cReadOnce(
     address: number,
     register: number,
     bytesToRead: number,
     handler: ReadHandler
   ): void;
-  public abstract i2cReadOnce(
+  public i2cReadOnce(
     address: number,
     registerOrBytesToRead: number,
     bytesToReadOrHandler: ReadHandler | number,
     handler?: ReadHandler
-  ): void;
+  ): void {
+    throw new Error(`i2cReadOnce is not supported by ${this.name}`);
+  }
 
-  public abstract pingRead(settings: IPingReadSettings, handler: (duration: number) => void): void;
+  public pingRead(settings: IPingReadSettings, handler: (duration: number) => void): void {
+    throw new Error(`pingRead is not supported by ${this.name}`);
+  }
 
-  public abstract serialRead(
+  public serialRead(
     portId: number | string,
     handler: ReadHandler
   ): void;
-  public abstract serialRead(
+  public serialRead(
     portId: number | string,
     maxBytesToRead: number,
     handler: ReadHandler
   ): void;
-  public abstract serialRead(
+  public serialRead(
     portId: number | string,
     maxBytesToReadOrHandler: ReadHandler | number,
     handler?: ReadHandler
-  ): void;
+  ): void {
+    throw new Error(`serialRead is not supported by ${this.name}`);
+  }
 
   // Configuring
 
-  public abstract i2cConfig(options: II2CConfig): void;
+  public i2cConfig(options: II2CConfig): void {
+    throw new Error(`i2cConfig is not supported by ${this.name}`);
+  }
 
-  public abstract serialConfig(options: ISerialConfig): void;
+  public serialConfig(options: ISerialConfig): void {
+    throw new Error(`serialConfig is not supported by ${this.name}`);
+  }
 
-  public abstract servoConfig(options: IServoConfig): void;
-  public abstract servoConfig(pin: number, min: number, max: number): void;
-  public abstract servoConfig(optionsOrPin: IServoConfig | number, min?: number, max?: number): void;
+  public servoConfig(options: IServoConfig): void;
+  public servoConfig(pin: number, min: number, max: number): void;
+  public servoConfig(optionsOrPin: IServoConfig | number, min?: number, max?: number): void {
+    throw new Error(`servoConfig is not supported by ${this.name}`);
+  }
 
   // IO Control
 
-  public abstract serialStop(portId: number | string): void;
+  public serialStop(portId: number | string): void {
+    throw new Error(`serialStop is not supported by ${this.name}`);
+  }
 
-  public abstract serialClose(portId: number | string): void;
+  public serialClose(portId: number | string): void {
+    throw new Error(`serialClose is not supported by ${this.name}`);
+  }
 
-  public abstract serialFlush(portId: number | string): void;
+  public serialFlush(portId: number | string): void {
+    throw new Error(`serialFlush is not supported by ${this.name}`);
+  }
 
-  // Methods not currently documented and with incorrect signatures
-  // See https://github.com/rwaldron/io-plugins/issues/22)
+  // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
 
-  public abstract sendOneWireConfig(): void;
+  public sendOneWireConfig(): void {
+    throw new Error(`sendOneWireConfig is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireSearch(): void;
+  public sendOneWireSearch(): void {
+    throw new Error(`sendOneWireSearch is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireAlarmsSearch(): void;
+  public sendOneWireAlarmsSearch(): void {
+    throw new Error(`sendOneWireAlarmsSearch is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireRead(): void;
+  public sendOneWireRead(): void {
+    throw new Error(`sendOneWireRead is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireReset(): void;
+  public sendOneWireReset(): void {
+    throw new Error(`sendOneWireReset is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireWrite(): void;
+  public sendOneWireWrite(): void {
+    throw new Error(`sendOneWireWrite is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireDelay(): void;
+  public sendOneWireDelay(): void {
+    throw new Error(`sendOneWireDelay is not supported by ${this.name}`);
+  }
 
-  public abstract sendOneWireWriteAndRead(): void;
+  public sendOneWireWriteAndRead(): void {
+    throw new Error(`sendOneWireWriteAndRead is not supported by ${this.name}`);
+  }
 
-  public abstract setSamplingInterval(): void;
+  public setSamplingInterval(): void {
+    throw new Error(`setSamplingInterval is not supported by ${this.name}`);
+  }
 
-  public abstract stepperConfig(): void;
+  public stepperConfig(): void {
+    throw new Error(`stepperConfig is not supported by ${this.name}`);
+  }
 
-  public abstract stepperStep(): void;
+  public stepperStep(): void {
+    throw new Error(`stepperStep is not supported by ${this.name}`);
+  }
 
   // Special
 
-  public abstract normalize(pin: number | string): number;
+  public normalize(pin: number | string): number {
+    throw new Error(`normalize is not supported by ${this.name}`);
+  }
 
   // Deprecated aliases and firmata.js compatibility functions that IO plugins don't need to worry about
 
@@ -228,7 +292,7 @@ export abstract class AbstractIOCore extends EventEmitter {
   public sendI2CWriteRequest(address: number, inBytes: number[]): void;
   public sendI2CWriteRequest(address: number, register: number, inBytes: number[]): void;
   public sendI2CWriteRequest(address: number, registerOrInBytes: number | number[], inBytes?: number[]): void {
-    return this.i2cWrite(address, registerOrInBytes, inBytes);
+    return this.i2cWrite(address, registerOrInBytes as any, inBytes as any);
   }
 
   public sendI2CReadRequest(
@@ -248,7 +312,7 @@ export abstract class AbstractIOCore extends EventEmitter {
     bytesToReadOrHandler: ReadHandler | number,
     handler?: ReadHandler
   ): void {
-    return this.i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler, handler);
+    return this.i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler as any, handler as any);
   }
 
   public reset() {
@@ -265,199 +329,5 @@ export abstract class AbstractIOCore extends EventEmitter {
 
   public pulseIn() {
     throw new Error('pulseIn is not supported by this IO plugin');
-  }
-}
-
-export class AbstractIO extends AbstractIOCore {
-  public readonly name: string = 'Unnamed IO Plugin';
-  public readonly defaultLed: string | number = NaN;
-
-  public pinMode(pin: string | number, mode: Mode): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  // Writing methods
-
-  public analogWrite(pin: string | number, value: number): void {
-    this.pwmWrite(pin, value);
-  }
-
-  public pwmWrite(pin: string | number, value: number): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public servoWrite(pin: string | number, value: number): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public digitalWrite(pin: string | number, value: number): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public i2cWrite(address: number, inBytes: number[]): void;
-  public i2cWrite(address: number, register: number, inBytes: number[]): void;
-  public i2cWrite(address: number, registerOrInBytes: number | number[], inBytes?: number[]): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public i2cWriteReg(address: number, register: number, value: number): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public serialWrite(portId: string | number, inBytes: number[]): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  // Reading methods
-
-  public analogRead(pin: string | number, handler: (value: number) => void): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public digitalRead(pin: string | number, handler: (value: Value) => void): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public i2cRead(
-    address: number,
-    bytesToRead: number,
-    handler: ReadHandler
-  ): void;
-  public i2cRead(
-    address: number,
-    register: number,
-    bytesToRead: number,
-    handler: ReadHandler
-  ): void;
-  public i2cRead(
-    address: number,
-    registerOrBytesToRead: number,
-    bytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
-  ): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public i2cReadOnce(
-    address: number,
-    bytesToRead: number,
-    handler: ReadHandler
-  ): void;
-  public i2cReadOnce(
-    address: number,
-    register: number,
-    bytesToRead: number,
-    handler: ReadHandler
-  ): void;
-  public i2cReadOnce(
-    address: number,
-    registerOrBytesToRead: number,
-    bytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
-  ): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public pingRead(settings: IPingReadSettings, handler: (duration: number) => void): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public serialRead(
-    portId: number | string,
-    handler: ReadHandler
-  ): void;
-  public serialRead(
-    portId: number | string,
-    maxBytesToRead: number,
-    handler: ReadHandler
-  ): void;
-  public serialRead(
-    portId: number | string,
-    maxBytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
-  ): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  // Configuring
-
-  public i2cConfig(options: II2CConfig): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public serialConfig(options: ISerialConfig): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public servoConfig(options: IServoConfig): void;
-  public servoConfig(pin: number, min: number, max: number): void;
-  public servoConfig(optionsOrPin: IServoConfig | number, min?: number, max?: number): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  // IO Control
-
-  public serialStop(portId: number | string): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public serialClose(portId: number | string): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public serialFlush(portId: number | string): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
-
-  public sendOneWireConfig(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireSearch(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireAlarmsSearch(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireRead(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireReset(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireWrite(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireDelay(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public sendOneWireWriteAndRead(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public setSamplingInterval(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public stepperConfig(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  public stepperStep(): void {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
-  }
-
-  // Special
-
-  public normalize(pin: number | string): number {
-    throw new Error('This method must be implemented by a derived IO Plugin class');
   }
 }
