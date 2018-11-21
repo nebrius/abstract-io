@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "An interface and base class for creating Johnny-Five IO plugins",
   "main": "dist/index.js",
+  "types": "./declarations/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "tslint 'src/**/*.ts'",
