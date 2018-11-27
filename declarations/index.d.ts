@@ -15,13 +15,13 @@ export declare enum Value {
 export interface IPinConfiguration {
     supportedModes: Mode[];
     mode: Mode;
-    value: Value;
-    reporting: 0 | 1;
+    value: number;
+    report: 0 | 1;
     analogChannel: number;
 }
 export interface IPingReadSettings {
     pin: number | string;
-    value?: Value;
+    value?: number;
     pulseOut?: number;
 }
 export interface II2CConfig {
@@ -62,6 +62,7 @@ export declare class AbstractIO extends EventEmitter {
     pwmWrite(pin: string | number, value: number): void;
     servoWrite(pin: string | number, value: number): void;
     digitalWrite(pin: string | number, value: number): void;
+    flushDigitalPorts(): void;
     i2cWrite(address: number, inBytes: number[]): void;
     i2cWrite(address: number, register: number, inBytes: number[]): void;
     i2cWriteReg(address: number, register: number, value: number): void;

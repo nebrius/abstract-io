@@ -41,14 +41,14 @@ export enum Value {
 export interface IPinConfiguration {
   supportedModes: Mode[];
   mode: Mode;
-  value: Value;
-  reporting: 0 | 1;
+  value: number;
+  report: 0 | 1;
   analogChannel: number;
 }
 
 export interface IPingReadSettings {
   pin: number | string;
-  value?: Value;
+  value?: number;
   pulseOut?: number;
 }
 
@@ -129,6 +129,10 @@ export class AbstractIO extends EventEmitter {
 
   public digitalWrite(pin: string | number, value: number): void {
     throw new Error(`digitalWrite is not supported by ${this.name}`);
+  }
+
+  public flushDigitalPorts(): void {
+    // Do nothing, as this is not a core method and should silently do nothing if not supported.
   }
 
   public i2cWrite(address: number, inBytes: number[]): void;

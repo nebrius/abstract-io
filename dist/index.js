@@ -83,6 +83,9 @@ class AbstractIO extends events_1.EventEmitter {
     digitalWrite(pin, value) {
         throw new Error(`digitalWrite is not supported by ${this.name}`);
     }
+    flushDigitalPorts() {
+        // Do nothing, as this is not a core method and should silently do nothing if not supported.
+    }
     i2cWrite(address, registerOrInBytes, inBytes) {
         throw new Error(`i2cWrite is not supported by ${this.name}`);
     }
