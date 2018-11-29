@@ -30,6 +30,7 @@ export enum Mode {
   ANALOG = 2,
   PWM = 3,
   SERVO = 4,
+  STEPPER = 5,
   UNKOWN = 99
 }
 
@@ -132,7 +133,7 @@ export class AbstractIO extends EventEmitter {
   }
 
   public flushDigitalPorts(): void {
-    // Do nothing, as this is not a core method and should silently do nothing if not supported.
+    throw new Error(`flushDigitalPorts is not supported by ${this.name}`);
   }
 
   public i2cWrite(address: number, inBytes: number[]): void;

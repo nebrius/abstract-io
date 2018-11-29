@@ -6,6 +6,7 @@ export declare enum Mode {
     ANALOG = 2,
     PWM = 3,
     SERVO = 4,
+    STEPPER = 5,
     UNKOWN = 99
 }
 export declare enum Value {

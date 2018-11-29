@@ -31,6 +31,7 @@ var Mode;
     Mode[Mode["ANALOG"] = 2] = "ANALOG";
     Mode[Mode["PWM"] = 3] = "PWM";
     Mode[Mode["SERVO"] = 4] = "SERVO";
+    Mode[Mode["STEPPER"] = 5] = "STEPPER";
     Mode[Mode["UNKOWN"] = 99] = "UNKOWN";
 })(Mode = exports.Mode || (exports.Mode = {}));
 var Value;
@@ -84,7 +85,7 @@ class AbstractIO extends events_1.EventEmitter {
         throw new Error(`digitalWrite is not supported by ${this.name}`);
     }
     flushDigitalPorts() {
-        // Do nothing, as this is not a core method and should silently do nothing if not supported.
+        throw new Error(`flushDigitalPorts is not supported by ${this.name}`);
     }
     i2cWrite(address, registerOrInBytes, inBytes) {
         throw new Error(`i2cWrite is not supported by ${this.name}`);
