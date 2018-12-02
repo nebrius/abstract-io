@@ -39,6 +39,23 @@ var Value;
     Value[Value["HIGH"] = 1] = "HIGH";
     Value[Value["LOW"] = 0] = "LOW";
 })(Value = exports.Value || (exports.Value = {}));
+var StepperType;
+(function (StepperType) {
+    StepperType[StepperType["DRIVER"] = 1] = "DRIVER";
+    StepperType[StepperType["TWO_WIRE"] = 2] = "TWO_WIRE";
+    StepperType[StepperType["THREE_WIRE"] = 3] = "THREE_WIRE";
+    StepperType[StepperType["FOUR_WIRE"] = 4] = "FOUR_WIRE";
+})(StepperType = exports.StepperType || (exports.StepperType = {}));
+var StepperStepSize;
+(function (StepperStepSize) {
+    StepperStepSize[StepperStepSize["WHOLE"] = 0] = "WHOLE";
+    StepperStepSize[StepperStepSize["HALF"] = 1] = "HALF";
+})(StepperStepSize = exports.StepperStepSize || (exports.StepperStepSize = {}));
+var StepperDirection;
+(function (StepperDirection) {
+    StepperDirection[StepperDirection["CCW"] = 0] = "CCW";
+    StepperDirection[StepperDirection["CW"] = 1] = "CW";
+})(StepperDirection = exports.StepperDirection || (exports.StepperDirection = {}));
 class AbstractIO extends events_1.EventEmitter {
     get MODES() {
         return {
@@ -135,43 +152,84 @@ class AbstractIO extends events_1.EventEmitter {
     serialFlush(portId) {
         throw new Error(`serialFlush is not supported by ${this.name}`);
     }
-    // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
-    sendOneWireConfig() {
-        throw new Error(`sendOneWireConfig is not supported by ${this.name}`);
-    }
-    sendOneWireSearch() {
-        throw new Error(`sendOneWireSearch is not supported by ${this.name}`);
-    }
-    sendOneWireAlarmsSearch() {
-        throw new Error(`sendOneWireAlarmsSearch is not supported by ${this.name}`);
-    }
-    sendOneWireRead() {
-        throw new Error(`sendOneWireRead is not supported by ${this.name}`);
-    }
-    sendOneWireReset() {
-        throw new Error(`sendOneWireReset is not supported by ${this.name}`);
-    }
-    sendOneWireWrite() {
-        throw new Error(`sendOneWireWrite is not supported by ${this.name}`);
-    }
-    sendOneWireDelay() {
-        throw new Error(`sendOneWireDelay is not supported by ${this.name}`);
-    }
-    sendOneWireWriteAndRead() {
-        throw new Error(`sendOneWireWriteAndRead is not supported by ${this.name}`);
-    }
-    setSamplingInterval() {
-        throw new Error(`setSamplingInterval is not supported by ${this.name}`);
-    }
-    stepperConfig() {
-        throw new Error(`stepperConfig is not supported by ${this.name}`);
-    }
-    stepperStep() {
-        throw new Error(`stepperStep is not supported by ${this.name}`);
-    }
     // Special
     normalize(pin) {
         throw new Error(`normalize is not supported by ${this.name}`);
+    }
+    // Miscellaneous methods that are not currently documented, see https://github.com/rwaldron/io-plugins/issues/22
+    // Special
+    setSamplingInterval(interval) {
+        throw new Error(`setSamplingInterval is not supported by ${this.name}`);
+    }
+    // One Wire
+    sendOneWireConfig(pin, enableParasiticPower) {
+        throw new Error(`sendOneWireConfig is not supported by ${this.name}`);
+    }
+    sendOneWireSearch(pin, cb) {
+        throw new Error(`sendOneWireSearch is not supported by ${this.name}`);
+    }
+    sendOneWireAlarmsSearch(pin, cb) {
+        throw new Error(`sendOneWireAlarmsSearch is not supported by ${this.name}`);
+    }
+    sendOneWireRead(pin, device, numBytesToRead, callback) {
+        throw new Error(`sendOneWireRead is not supported by ${this.name}`);
+    }
+    sendOneWireReset(pin) {
+        throw new Error(`sendOneWireReset is not supported by ${this.name}`);
+    }
+    sendOneWireWrite(pin, device, data) {
+        throw new Error(`sendOneWireWrite is not supported by ${this.name}`);
+    }
+    sendOneWireDelay(pin, delay) {
+        throw new Error(`sendOneWireDelay is not supported by ${this.name}`);
+    }
+    sendOneWireWriteAndRead(pin, device, data, numBytesToRead, callback) {
+        throw new Error(`sendOneWireWriteAndRead is not supported by ${this.name}`);
+    }
+    // Stepper
+    stepperConfig(deviceNum, type, stepsPerRev, dirOrMotor1Pin, dirOrMotor2Pin, motorPin3, motorPin4) {
+        throw new Error(`stepperConfig is not supported by ${this.name}`);
+    }
+    stepperStep(deviceNum, direction, steps, speed, accelOrCallback, decel, callback) {
+        throw new Error(`stepperStep is not supported by ${this.name}`);
+    }
+    // Accel Stepper
+    accelStepperConfig(config) {
+        throw new Error(`accelStepperConfig is not supported by ${this.name}`);
+    }
+    accelStepperZero(deviceNum) {
+        throw new Error(`accelStepperZero is not supported by ${this.name}`);
+    }
+    accelStepperStep(deviceNum, steps, callback) {
+        throw new Error(`accelStepperStep is not supported by ${this.name}`);
+    }
+    accelStepperTo(deviceNum, position, callback) {
+        throw new Error(`accelStepperTo is not supported by ${this.name}`);
+    }
+    accelStepperEnable(deviceNum, enabled) {
+        throw new Error(`accelStepperEnable is not supported by ${this.name}`);
+    }
+    accelStepperStop(deviceNum) {
+        throw new Error(`accelStepperStop is not supported by ${this.name}`);
+    }
+    accelStepperReportPosition(deviceNum) {
+        throw new Error(`accelStepperReportPosition is not supported by ${this.name}`);
+    }
+    accelStepperSpeed(deviceNum, speed) {
+        throw new Error(`accelStepperSpeed is not supported by ${this.name}`);
+    }
+    accelStepperAcceleration(deviceNum, acceleration) {
+        throw new Error(`accelStepperAcceleration is not supported by ${this.name}`);
+    }
+    // Multi Stepper
+    multiStepperConfig(config) {
+        throw new Error(`multiStepperConfig is not supported by ${this.name}`);
+    }
+    multiStepperTo(groupNum, positions, callback) {
+        throw new Error(`multiStepperTo is not supported by ${this.name}`);
+    }
+    multiStepperStop(groupNum) {
+        throw new Error(`multiStepperStop is not supported by ${this.name}`);
     }
     // Deprecated aliases and firmata.js compatibility functions that IO plugins don't need to worry about
     analogWrite(pin, value) {

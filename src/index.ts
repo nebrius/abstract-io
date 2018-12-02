@@ -63,6 +63,9 @@ export interface II2CConfig {
 export interface ISerialConfig {
   portId: number | string;
   baud?: number;
+  dataBits?: 5 | 6 | 7 | 8;
+  parity?: 'none' | 'even' | 'mark' | 'odd' | 'space';
+  stopBits?: 1 | 1.5 | 2;
   rxPin?: number | string;
   txPin?: number | string;
 }
@@ -73,7 +76,47 @@ export interface IServoConfig {
   max?: number;
 }
 
-export type ReadHandler = (data: number[]) => void;
+export enum StepperType {
+  DRIVER = 1,
+  TWO_WIRE = 2,
+  THREE_WIRE = 3,
+  FOUR_WIRE = 4
+}
+
+export enum StepperStepSize {
+  WHOLE = 0,
+  HALF = 1
+}
+
+export enum StepperDirection {
+  CCW = 0,
+  CW = 1
+}
+
+export interface IAccelStepperConfig {
+  deviceNum: number;
+  type?: StepperType;
+  stepSize?: StepperStepSize;
+  stepPin?: number;
+  directionPin?: number;
+  motorPin1?: number;
+  motorPin2?: number;
+  motorPin3?: number;
+  motorPin4?: number;
+  enablePin?: number;
+  invertPins?: number;
+}
+
+export interface IMultiStepperConfig {
+  groupNum: number;
+  devices: number[];
+}
+
+export type Callback = (err: Error | undefined) => void;
+
+export type CallbackWithValue<T> = (err: Error | undefined, value: T) => void;
+
+export type Handler<T> = (data: T) => void;
 
 export class AbstractIO extends EventEmitter {
   public get MODES() {
@@ -163,19 +206,19 @@ export class AbstractIO extends EventEmitter {
   public i2cRead(
     address: number,
     bytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public i2cRead(
     address: number,
     register: number,
     bytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public i2cRead(
     address: number,
     registerOrBytesToRead: number,
-    bytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
+    bytesToReadOrHandler: Handler<number[]> | number,
+    handler?: Handler<number[]>
   ): void {
     throw new Error(`i2cRead is not supported by ${this.name}`);
   }
@@ -183,19 +226,19 @@ export class AbstractIO extends EventEmitter {
   public i2cReadOnce(
     address: number,
     bytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public i2cReadOnce(
     address: number,
     register: number,
     bytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public i2cReadOnce(
     address: number,
     registerOrBytesToRead: number,
-    bytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
+    bytesToReadOrHandler: Handler<number[]> | number,
+    handler?: Handler<number[]>
   ): void {
     throw new Error(`i2cReadOnce is not supported by ${this.name}`);
   }
@@ -206,17 +249,17 @@ export class AbstractIO extends EventEmitter {
 
   public serialRead(
     portId: number | string,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public serialRead(
     portId: number | string,
     maxBytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public serialRead(
     portId: number | string,
-    maxBytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
+    maxBytesToReadOrHandler: Handler<number[]> | number,
+    handler?: Handler<number[]>
   ): void {
     throw new Error(`serialRead is not supported by ${this.name}`);
   }
@@ -251,56 +294,157 @@ export class AbstractIO extends EventEmitter {
     throw new Error(`serialFlush is not supported by ${this.name}`);
   }
 
-  // One Wire (not currently documented, see https://github.com/rwaldron/io-plugins/issues/22)
-
-  public sendOneWireConfig(): void {
-    throw new Error(`sendOneWireConfig is not supported by ${this.name}`);
-  }
-
-  public sendOneWireSearch(): void {
-    throw new Error(`sendOneWireSearch is not supported by ${this.name}`);
-  }
-
-  public sendOneWireAlarmsSearch(): void {
-    throw new Error(`sendOneWireAlarmsSearch is not supported by ${this.name}`);
-  }
-
-  public sendOneWireRead(): void {
-    throw new Error(`sendOneWireRead is not supported by ${this.name}`);
-  }
-
-  public sendOneWireReset(): void {
-    throw new Error(`sendOneWireReset is not supported by ${this.name}`);
-  }
-
-  public sendOneWireWrite(): void {
-    throw new Error(`sendOneWireWrite is not supported by ${this.name}`);
-  }
-
-  public sendOneWireDelay(): void {
-    throw new Error(`sendOneWireDelay is not supported by ${this.name}`);
-  }
-
-  public sendOneWireWriteAndRead(): void {
-    throw new Error(`sendOneWireWriteAndRead is not supported by ${this.name}`);
-  }
-
-  public setSamplingInterval(): void {
-    throw new Error(`setSamplingInterval is not supported by ${this.name}`);
-  }
-
-  public stepperConfig(): void {
-    throw new Error(`stepperConfig is not supported by ${this.name}`);
-  }
-
-  public stepperStep(): void {
-    throw new Error(`stepperStep is not supported by ${this.name}`);
-  }
-
   // Special
 
   public normalize(pin: number | string): number {
     throw new Error(`normalize is not supported by ${this.name}`);
+  }
+
+  // Miscellaneous methods that are not currently documented, see https://github.com/rwaldron/io-plugins/issues/22
+
+  // Special
+
+  public setSamplingInterval(interval: number): void {
+    throw new Error(`setSamplingInterval is not supported by ${this.name}`);
+  }
+
+  // One Wire
+
+  public sendOneWireConfig(pin: string | number, enableParasiticPower: boolean): void {
+    throw new Error(`sendOneWireConfig is not supported by ${this.name}`);
+  }
+
+  public sendOneWireSearch(pin: string | number, cb: CallbackWithValue<number[]>): void {
+    throw new Error(`sendOneWireSearch is not supported by ${this.name}`);
+  }
+
+  public sendOneWireAlarmsSearch(pin: string | number, cb: CallbackWithValue<number[]>): void {
+    throw new Error(`sendOneWireAlarmsSearch is not supported by ${this.name}`);
+  }
+
+  public sendOneWireRead(
+    pin: string | number,
+    device: number,
+    numBytesToRead: number,
+    callback: CallbackWithValue<number[]>
+  ): void {
+    throw new Error(`sendOneWireRead is not supported by ${this.name}`);
+  }
+
+  public sendOneWireReset(pin: string | number): void {
+    throw new Error(`sendOneWireReset is not supported by ${this.name}`);
+  }
+
+  public sendOneWireWrite(pin: string | number, device: number, data: number | number[]): void {
+    throw new Error(`sendOneWireWrite is not supported by ${this.name}`);
+  }
+
+  public sendOneWireDelay(pin: string | number, delay: number): void {
+    throw new Error(`sendOneWireDelay is not supported by ${this.name}`);
+  }
+
+  public sendOneWireWriteAndRead(
+    pin: number | string,
+    device: number,
+    data: number | number[],
+    numBytesToRead: number,
+    callback: CallbackWithValue<number[]>
+  ): void {
+    throw new Error(`sendOneWireWriteAndRead is not supported by ${this.name}`);
+  }
+
+  // Stepper
+
+  public stepperConfig(
+    deviceNum: number,
+    type: number,
+    stepsPerRev: number,
+    dirOrMotor1Pin: number,
+    dirOrMotor2Pin: number,
+    motorPin3?: number,
+    motorPin4?: number
+  ): void {
+    throw new Error(`stepperConfig is not supported by ${this.name}`);
+  }
+
+  public stepperStep(
+    deviceNum: number,
+    direction: number,
+    steps: number,
+    speed: number,
+    callback: Callback
+  ): void;
+  public stepperStep(
+    deviceNum: number,
+    direction: number,
+    steps: number,
+    speed: number,
+    accel: number,
+    decel: number,
+    callback: Callback
+  ): void;
+  public stepperStep(
+    deviceNum: number,
+    direction: number,
+    steps: number,
+    speed: number,
+    accelOrCallback: number | Callback,
+    decel?: number,
+    callback?: Callback
+  ): void {
+    throw new Error(`stepperStep is not supported by ${this.name}`);
+  }
+
+  // Accel Stepper
+
+  public accelStepperConfig(config: IAccelStepperConfig): void {
+    throw new Error(`accelStepperConfig is not supported by ${this.name}`);
+  }
+
+  public accelStepperZero(deviceNum: number): void {
+    throw new Error(`accelStepperZero is not supported by ${this.name}`);
+  }
+
+  public accelStepperStep(deviceNum: number, steps: number, callback?: Callback): void {
+    throw new Error(`accelStepperStep is not supported by ${this.name}`);
+  }
+
+  public accelStepperTo(deviceNum: number, position: number, callback?: Callback): void {
+    throw new Error(`accelStepperTo is not supported by ${this.name}`);
+  }
+
+  public accelStepperEnable(deviceNum: number, enabled: boolean): void {
+    throw new Error(`accelStepperEnable is not supported by ${this.name}`);
+  }
+
+  public accelStepperStop(deviceNum: number): void {
+    throw new Error(`accelStepperStop is not supported by ${this.name}`);
+  }
+
+  public accelStepperReportPosition(deviceNum: number): void {
+    throw new Error(`accelStepperReportPosition is not supported by ${this.name}`);
+  }
+
+  public accelStepperSpeed(deviceNum: number, speed: number): void {
+    throw new Error(`accelStepperSpeed is not supported by ${this.name}`);
+  }
+
+  public accelStepperAcceleration(deviceNum: number, acceleration: number): void {
+    throw new Error(`accelStepperAcceleration is not supported by ${this.name}`);
+  }
+
+  // Multi Stepper
+
+  public multiStepperConfig(config: IMultiStepperConfig): void {
+    throw new Error(`multiStepperConfig is not supported by ${this.name}`);
+  }
+
+  public multiStepperTo(groupNum: number, positions: number[], callback?: Callback): void {
+    throw new Error(`multiStepperTo is not supported by ${this.name}`);
+  }
+
+  public multiStepperStop(groupNum: number): void {
+    throw new Error(`multiStepperStop is not supported by ${this.name}`);
   }
 
   // Deprecated aliases and firmata.js compatibility functions that IO plugins don't need to worry about
@@ -322,19 +466,19 @@ export class AbstractIO extends EventEmitter {
   public sendI2CReadRequest(
     address: number,
     bytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public sendI2CReadRequest(
     address: number,
     register: number,
     bytesToRead: number,
-    handler: ReadHandler
+    handler: Handler<number[]>
   ): void;
   public sendI2CReadRequest(
     address: number,
     registerOrBytesToRead: number,
-    bytesToReadOrHandler: ReadHandler | number,
-    handler?: ReadHandler
+    bytesToReadOrHandler: Handler<number[]> | number,
+    handler?: Handler<number[]>
   ): void {
     return this.i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler as any, handler as any);
   }
