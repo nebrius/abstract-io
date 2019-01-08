@@ -126,7 +126,7 @@ export class AbstractIO extends EventEmitter {
       ANALOG: Mode.ANALOG,
       PWM: Mode.PWM,
       SERVO: Mode.SERVO,
-      UNKOWN: Mode.UNKOWN
+      UNKNOWN: Mode.UNKOWN
     };
   }
 

@@ -64,7 +64,7 @@ class AbstractIO extends events_1.EventEmitter {
             ANALOG: Mode.ANALOG,
             PWM: Mode.PWM,
             SERVO: Mode.SERVO,
-            UNKOWN: Mode.UNKOWN
+            UNKNOWN: Mode.UNKOWN
         };
     }
     get HIGH() {

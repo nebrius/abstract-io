@@ -86,7 +86,7 @@ export declare class AbstractIO extends EventEmitter {
         ANALOG: Mode;
         PWM: Mode;
         SERVO: Mode;
-        UNKOWN: Mode;
+        UNKNOWN: Mode;
     };
     readonly HIGH: Value;
     readonly LOW: Value;
