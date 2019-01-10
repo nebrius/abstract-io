@@ -88,6 +88,9 @@ class AbstractIO extends events_1.EventEmitter {
     get isReady() {
         throw new Error(`The "isReady" property must be overridden by a derived IO Plugin class`);
     }
+    get SERIAL_PORT_IDs() {
+        throw new Error(`The "SERIAL_PORT_IDs" property must be overridden by a derived IO Plugin class`);
+    }
     pinMode(pin, mode) {
         throw new Error(`The "pinMode" method must be overridden by a derived IO Plugin class`);
     }

@@ -95,6 +95,9 @@ export declare class AbstractIO extends EventEmitter {
     readonly name: string;
     readonly defaultLed: string | number | undefined;
     readonly isReady: boolean;
+    readonly SERIAL_PORT_IDs: {
+        [portId: string]: any;
+    };
     pinMode(pin: string | number, mode: Mode): void;
     pwmWrite(pin: string | number, value: number): void;
     servoWrite(pin: string | number, value: number): void;

@@ -1,4 +1,8 @@
-## 1.0.1 (2019-01-07)
+## 1.1.0 (2019-1-9)
+
+- Added missing `SERIAL_PORT_IDs` property from the IO Plugin spec
+
+## 1.0.1 (2019-1-7)
 
 - Fixed a spelling error
 
