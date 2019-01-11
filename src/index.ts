@@ -502,4 +502,28 @@ export class AbstractIO extends EventEmitter {
   public pulseIn() {
     throw new Error(`pulseIn is not supported by ${this.name}`);
   }
+
+  public queryCapabilities(cb: Callback): void {
+    if (this.isReady) {
+      process.nextTick(cb);
+    } else {
+      this.on('ready', cb);
+    }
+  }
+
+  public queryAnalogMapping(cb: Callback): void {
+    if (this.isReady) {
+      process.nextTick(cb);
+    } else {
+      this.on('ready', cb);
+    }
+  }
+
+  public queryPinState(pin: string | number, cb: Callback): void {
+    if (this.isReady) {
+      process.nextTick(cb);
+    } else {
+      this.on('ready', cb);
+    }
+  }
 }

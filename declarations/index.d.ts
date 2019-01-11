@@ -158,4 +158,7 @@ export declare class AbstractIO extends EventEmitter {
     reportAnalogPin(): void;
     reportDigitalPin(): void;
     pulseIn(): void;
+    queryCapabilities(cb: Callback): void;
+    queryAnalogMapping(cb: Callback): void;
+    queryPinState(pin: string | number, cb: Callback): void;
 }

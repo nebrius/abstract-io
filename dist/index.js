@@ -259,6 +259,30 @@ class AbstractIO extends events_1.EventEmitter {
     pulseIn() {
         throw new Error(`pulseIn is not supported by ${this.name}`);
     }
+    queryCapabilities(cb) {
+        if (this.isReady) {
+            process.nextTick(cb);
+        }
+        else {
+            this.on('ready', cb);
+        }
+    }
+    queryAnalogMapping(cb) {
+        if (this.isReady) {
+            process.nextTick(cb);
+        }
+        else {
+            this.on('ready', cb);
+        }
+    }
+    queryPinState(pin, cb) {
+        if (this.isReady) {
+            process.nextTick(cb);
+        }
+        else {
+            this.on('ready', cb);
+        }
+    }
 }
 exports.AbstractIO = AbstractIO;
 //# sourceMappingURL=index.js.map

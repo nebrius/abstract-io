@@ -1,3 +1,7 @@
+## 1.3.0 (2019-1-11)
+
+- Added `queryCapabilities`, `queryAnalogMapping`, and `queryPinState` methods
+
 ## 1.2.1 (2019-1-11)
 
 - Fixed a bug where certain readonly properties weren't correctly reporting they are frozen objects/arrays
