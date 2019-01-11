@@ -1,3 +1,7 @@
+## 1.2.0 (2019-1-10)
+
+- Normalized unsupported error messages to always say `reset is not supported by ${this.name}`
+
 ## 1.1.0 (2019-1-9)
 
 - Added missing `SERIAL_PORT_IDs` property from the IO Plugin spec

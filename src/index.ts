@@ -488,18 +488,18 @@ export class AbstractIO extends EventEmitter {
   }
 
   public reset() {
-    throw new Error('reset is not supported by this IO plugin');
+    throw new Error(`reset is not supported by ${this.name}`);
   }
 
   public reportAnalogPin() {
-    throw new Error('reportAnalogPin is not supported by this IO plugin');
+    throw new Error(`reportAnalogPin is not supported by ${this.name}`);
   }
 
   public reportDigitalPin() {
-    throw new Error('reportDigitalPin is not supported by this IO plugin');
+    throw new Error(`reportDigitalPin is not supported by ${this.name}`);
   }
 
   public pulseIn() {
-    throw new Error('pulseIn is not supported by this IO plugin');
+    throw new Error(`pulseIn is not supported by ${this.name}`);
   }
 }

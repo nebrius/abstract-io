@@ -248,16 +248,16 @@ class AbstractIO extends events_1.EventEmitter {
         return this.i2cReadOnce(address, registerOrBytesToRead, bytesToReadOrHandler, handler);
     }
     reset() {
-        throw new Error('reset is not supported by this IO plugin');
+        throw new Error(`reset is not supported by ${this.name}`);
     }
     reportAnalogPin() {
-        throw new Error('reportAnalogPin is not supported by this IO plugin');
+        throw new Error(`reportAnalogPin is not supported by ${this.name}`);
     }
     reportDigitalPin() {
-        throw new Error('reportDigitalPin is not supported by this IO plugin');
+        throw new Error(`reportDigitalPin is not supported by ${this.name}`);
     }
     pulseIn() {
-        throw new Error('pulseIn is not supported by this IO plugin');
+        throw new Error(`pulseIn is not supported by ${this.name}`);
     }
 }
 exports.AbstractIO = AbstractIO;
