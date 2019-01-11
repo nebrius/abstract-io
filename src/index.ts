@@ -120,14 +120,14 @@ export type Handler<T> = (data: T) => void;
 
 export class AbstractIO extends EventEmitter {
   public get MODES() {
-    return {
+    return Object.freeze({
       INPUT: Mode.INPUT,
       OUTPUT: Mode.OUTPUT,
       ANALOG: Mode.ANALOG,
       PWM: Mode.PWM,
       SERVO: Mode.SERVO,
       UNKNOWN: Mode.UNKOWN
-    };
+    });
   }
 
   public get HIGH() {
@@ -137,11 +137,11 @@ export class AbstractIO extends EventEmitter {
     return Value.LOW;
   }
 
-  public get pins(): IPinConfiguration[] {
+  public get pins(): ReadonlyArray<IPinConfiguration> {
     throw new Error(`The "pins" property must be overridden by a derived IO Plugin class`);
   }
 
-  public get analogPins(): number[] {
+  public get analogPins(): ReadonlyArray<number> {
     throw new Error(`The "analogPins" property must be overridden by a derived IO Plugin class`);
   }
 
@@ -157,7 +157,7 @@ export class AbstractIO extends EventEmitter {
     throw new Error(`The "isReady" property must be overridden by a derived IO Plugin class`);
   }
 
-  public get SERIAL_PORT_IDs(): { [ portId: string ]: any } {
+  public get SERIAL_PORT_IDs(): Readonly<{ [ portId: string ]: any }> {
     throw new Error(`The "SERIAL_PORT_IDs" property must be overridden by a derived IO Plugin class`);
   }
 

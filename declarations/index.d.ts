@@ -80,24 +80,24 @@ export declare type Callback = (err: Error | undefined) => void;
 export declare type CallbackWithValue<T> = (err: Error | undefined, value: T) => void;
 export declare type Handler<T> = (data: T) => void;
 export declare class AbstractIO extends EventEmitter {
-    readonly MODES: {
+    readonly MODES: Readonly<{
         INPUT: Mode;
         OUTPUT: Mode;
         ANALOG: Mode;
         PWM: Mode;
         SERVO: Mode;
         UNKNOWN: Mode;
-    };
+    }>;
     readonly HIGH: Value;
     readonly LOW: Value;
-    readonly pins: IPinConfiguration[];
-    readonly analogPins: number[];
+    readonly pins: ReadonlyArray<IPinConfiguration>;
+    readonly analogPins: ReadonlyArray<number>;
     readonly name: string;
     readonly defaultLed: string | number | undefined;
     readonly isReady: boolean;
-    readonly SERIAL_PORT_IDs: {
+    readonly SERIAL_PORT_IDs: Readonly<{
         [portId: string]: any;
-    };
+    }>;
     pinMode(pin: string | number, mode: Mode): void;
     pwmWrite(pin: string | number, value: number): void;
     servoWrite(pin: string | number, value: number): void;

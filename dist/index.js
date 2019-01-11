@@ -58,14 +58,14 @@ var StepperDirection;
 })(StepperDirection = exports.StepperDirection || (exports.StepperDirection = {}));
 class AbstractIO extends events_1.EventEmitter {
     get MODES() {
-        return {
+        return Object.freeze({
             INPUT: Mode.INPUT,
             OUTPUT: Mode.OUTPUT,
             ANALOG: Mode.ANALOG,
             PWM: Mode.PWM,
             SERVO: Mode.SERVO,
             UNKNOWN: Mode.UNKOWN
-        };
+        });
     }
     get HIGH() {
         return Value.HIGH;

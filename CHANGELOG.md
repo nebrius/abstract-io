@@ -1,3 +1,7 @@
+## 1.2.1 (2019-1-11)
+
+- Fixed a bug where certain readonly properties weren't correctly reporting they are frozen objects/arrays
+
 ## 1.2.0 (2019-1-10)
 
 - Normalized unsupported error messages to always say `reset is not supported by ${this.name}`
