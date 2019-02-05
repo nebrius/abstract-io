@@ -1,6 +1,6 @@
 {
   "name": "abstract-io",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "An interface and base class for creating Johnny-Five IO plugins",
   "main": "dist/index.js",
   "types": "./declarations/index.d.ts",

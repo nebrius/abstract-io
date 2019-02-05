@@ -1,3 +1,7 @@
+## 1.4.0 (2019-2-5)
+
+- Added the ability to pass a string representing a pin (in addition to number) for `serverConfig`
+
 ## 1.3.0 (2019-1-11)
 
 - Added `queryCapabilities`, `queryAnalogMapping`, and `queryPinState` methods

@@ -280,7 +280,7 @@ export class AbstractIO extends EventEmitter {
 
   public servoConfig(options: IServoConfig): void;
   public servoConfig(pin: number, min: number, max: number): void;
-  public servoConfig(optionsOrPin: IServoConfig | number, min?: number, max?: number): void {
+  public servoConfig(optionsOrPin: IServoConfig | string | number, min?: number, max?: number): void {
     throw new Error(`servoConfig is not supported by ${this.name}`);
   }
 
