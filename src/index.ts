@@ -42,7 +42,7 @@ export enum Value {
 export interface IPinConfiguration {
   supportedModes: Mode[];
   mode: Mode;
-  value: number;
+  value: number | null;
   report: 0 | 1;
   analogChannel: number;
 }

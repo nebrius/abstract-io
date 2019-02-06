@@ -1,3 +1,7 @@
+## 1.5.0 (2019-2-6)
+
+- Added the ability for the `value` property on the `pins` array to be equal to `null`, representing a non-GPIO pin
+
 ## 1.4.0 (2019-2-5)
 
 - Added the ability to pass a string representing a pin (in addition to number) for `serverConfig`
