@@ -1,3 +1,7 @@
+## 1.5.1 (2019-2-20)
+
+- Fixed a typo, now reads `Mode.UNKNOWN` instead of `Mode.UNKOWN`
+
 ## 1.5.0 (2019-2-6)
 
 - Added the ability for the `value` property on the `pins` array to be equal to `null`, representing a non-GPIO pin

@@ -32,7 +32,7 @@ var Mode;
     Mode[Mode["PWM"] = 3] = "PWM";
     Mode[Mode["SERVO"] = 4] = "SERVO";
     Mode[Mode["STEPPER"] = 5] = "STEPPER";
-    Mode[Mode["UNKOWN"] = 99] = "UNKOWN";
+    Mode[Mode["UNKNOWN"] = 99] = "UNKNOWN";
 })(Mode = exports.Mode || (exports.Mode = {}));
 var Value;
 (function (Value) {
@@ -64,7 +64,7 @@ class AbstractIO extends events_1.EventEmitter {
             ANALOG: Mode.ANALOG,
             PWM: Mode.PWM,
             SERVO: Mode.SERVO,
-            UNKNOWN: Mode.UNKOWN
+            UNKNOWN: Mode.UNKNOWN
         });
     }
     get HIGH() {

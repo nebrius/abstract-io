@@ -7,7 +7,7 @@ export declare enum Mode {
     PWM = 3,
     SERVO = 4,
     STEPPER = 5,
-    UNKOWN = 99
+    UNKNOWN = 99
 }
 export declare enum Value {
     HIGH = 1,

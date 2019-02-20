@@ -31,7 +31,7 @@ export enum Mode {
   PWM = 3,
   SERVO = 4,
   STEPPER = 5,
-  UNKOWN = 99
+  UNKNOWN = 99
 }
 
 export enum Value {
@@ -126,7 +126,7 @@ export class AbstractIO extends EventEmitter {
       ANALOG: Mode.ANALOG,
       PWM: Mode.PWM,
       SERVO: Mode.SERVO,
-      UNKNOWN: Mode.UNKOWN
+      UNKNOWN: Mode.UNKNOWN
     });
   }
 
