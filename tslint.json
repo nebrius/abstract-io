@@ -13,7 +13,8 @@
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "variable-name": [ true, "allow-leading-underscore", "allow-pascal-case" ],
-    "max-classes-per-file": false
+    "max-classes-per-file": false,
+    "unified-signatures": false
   },
   "rulesDirectory": []
 }

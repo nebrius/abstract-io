@@ -1,3 +1,7 @@
+## 1.6.0 (2019-3-11)
+
+- Added missing overload for i2cWrite
+
 ## 1.5.1 (2019-2-20)
 
 - Fixed a typo, now reads `Mode.UNKNOWN` instead of `Mode.UNKOWN`
