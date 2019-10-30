@@ -183,7 +183,7 @@ export class AbstractIO extends EventEmitter {
     throw new Error(`flushDigitalPorts is not supported by ${this.name}`);
   }
 
-  public i2cWrite(address: number, register: number): void;
+  public i2cWrite(address: number, byte: number): void;
   public i2cWrite(address: number, inBytes: number[]): void;
   public i2cWrite(address: number, register: number, inBytes: number[]): void;
   public i2cWrite(address: number, registerOrInBytes: number | number[], inBytes?: number[]): void {

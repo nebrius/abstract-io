@@ -103,7 +103,7 @@ export declare class AbstractIO extends EventEmitter {
     servoWrite(pin: string | number, value: number): void;
     digitalWrite(pin: string | number, value: number): void;
     flushDigitalPorts(): void;
-    i2cWrite(address: number, register: number): void;
+    i2cWrite(address: number, byte: number): void;
     i2cWrite(address: number, inBytes: number[]): void;
     i2cWrite(address: number, register: number, inBytes: number[]): void;
     i2cWriteReg(address: number, register: number, value: number): void;
